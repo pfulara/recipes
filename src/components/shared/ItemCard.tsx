@@ -5,25 +5,24 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { Badge } from '@/components/ui/badge';
+import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
+import ItemBadge from './ItemBadge';
 
 export default function ItemCard({ item }: { item: any }) {
   return (
-    <Link href={`/recipes/${item.id}`}>
-      <Card className='hover:shadow-md hover:bg-secondary/40 h-full'>
+    <Card className='hover:shadow-md hover:bg-secondary/40 h-full'>
+      <Link href={`/recipes/${item.id}`}>
         <CardHeader>
           <CardTitle>{item.name}</CardTitle>
         </CardHeader>
+      </Link>
 
-        <CardContent className='flex gap-2 flex-wrap'>
-          {item.tags.map((tag: string) => (
-            <Badge key={tag} className='whitespace-nowrap'>
-              {tag}
-            </Badge>
-          ))}
-        </CardContent>
-      </Card>
-    </Link>
+      <CardContent className='flex gap-2 flex-wrap'>
+        {item.tags.map((tag: string) => (
+          <ItemBadge key={uuidv4()} tag={tag} />
+        ))}
+      </CardContent>
+    </Card>
   );
 }

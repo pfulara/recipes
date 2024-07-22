@@ -8,6 +8,9 @@ import {
   doc,
   getDoc,
   getDocs,
+  or,
+  query,
+  where,
 } from '@firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
@@ -32,11 +35,21 @@ export const addItem = async (item: RecipeParams) => {
   }
 };
 
-export const getItems = async () => {
+export const getItems = async (search: string = '') => {
   try {
-    const querySnapshot = await getDocs(
-      collection(db, 'recipes')
-    );
+    const queryRef = collection(db, 'recipes');
+
+    const querySnapshot = search
+      ? await getDocs(
+          query(
+            queryRef,
+            or(
+              where('tags', 'array-contains-any', [search]),
+              where('name', '==', search)
+            )
+          )
+        )
+      : await getDocs(queryRef);
 
     const items = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
