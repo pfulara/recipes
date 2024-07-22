@@ -14,9 +14,9 @@ export default async function RecipeDetail({
 
   return (
     <div>
-      <h1 className='font-black text-2xl uppercase'>
+      <h2 className='font-black text-2xl uppercase'>
         {name}
-      </h1>
+      </h2>
       <div className='grid md:grid-cols-2 mt-4 gap-4'>
         <div>
           {ingredients.map((ingr) => (

@@ -11,7 +11,7 @@ import Link from 'next/link';
 export default function ItemCard({ item }: { item: any }) {
   return (
     <Link href={`/recipes/${item.id}`}>
-      <Card className='hover:shadow-md hover:bg-secondary/40'>
+      <Card className='hover:shadow-md hover:bg-secondary/40 h-full'>
         <CardHeader>
           <CardTitle>{item.name}</CardTitle>
         </CardHeader>

@@ -1,48 +1,51 @@
 'use client';
-import {
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { CircleX } from 'lucide-react';
 
 export default ({
   placeholder,
-  field,
+  value,
+  onChange,
 }: {
   placeholder: string;
-  field: any;
+  value: string[];
+  onChange: (values: string[]) => void;
 }) => {
-  const [value, setValue] = useState('');
-
-  const ref = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.key === 'Tab' && ref.current) {
-        // changeHandler();
-        console.log(ref.current.value);
-      }
-    };
-    document.addEventListener('keydown', listener);
+    if (inputValue.endsWith(',')) {
+      onChange([...value, inputValue.slice(0, -1)]);
+      setInputValue('');
+    }
+  }, [inputValue]);
 
-    return () => {
-      document.removeEventListener('keydown', listener);
-    };
-  }, []);
-  //   const changeHandler = (e) => {
-  //     console.log(e);
-  //     // setValue(value);
-  //   };
+  const removeItemHandler = (item: string) => {
+    onChange(value.filter((val) => val !== item));
+  };
+
   return (
-    <Input
-      placeholder={placeholder}
-      //   {...field}
-      ref={ref}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <div>
+      <Input
+        placeholder={placeholder}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <div className='flex gap-1 mt-2'>
+        {value.map((item) => (
+          <Badge key={item} className='flex gap-2 pr-1'>
+            {item}
+            <CircleX
+              size={16}
+              className='cursor-pointer'
+              onClick={() => removeItemHandler(item)}
+            />
+          </Badge>
+        ))}
+      </div>
+    </div>
   );
 };

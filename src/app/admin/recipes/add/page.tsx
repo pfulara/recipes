@@ -83,6 +83,23 @@ const AddRecipe = () => {
               )}
             />
             <FormField
+              name='tags'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className='pt-8 relative'>
+                  <FormLabel>Tagi</FormLabel>
+                  <FormControl>
+                    <MultiitemInput
+                      placeholder='Tagi'
+                      value={field.value || []}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage className='absolute top-7 right-0' />
+                </FormItem>
+              )}
+            />
+            <FormField
               name='ingredients'
               control={form.control}
               render={({ field }) => (
@@ -98,22 +115,6 @@ const AddRecipe = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-            name='tags'
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className='pt-8 relative'>
-                <FormLabel>Tagi</FormLabel>
-                <FormControl>
-                  <MultiitemInput
-                    placeholder='Tagi'
-                    field={field}
-                  />
-                </FormControl>
-                <FormMessage className='absolute top-7 right-0' />
-              </FormItem>
-            )}
-          /> */}
           </div>
           <div>
             <FormField
