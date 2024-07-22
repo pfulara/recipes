@@ -64,6 +64,8 @@ const AddRecipe = () => {
     }
   };
 
+  console.log(form.watch('description'));
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

@@ -14,7 +14,7 @@ export default function ItemBadge({
   };
   return (
     <Badge
-      className='whitespace-nowrap'
+      className='whitespace-nowrap cursor-pointer'
       onClick={searchTagHandler}
     >
       {tag}

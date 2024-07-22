@@ -20,12 +20,21 @@ export const addItem = async (item: RecipeParams) => {
       name: ing.name,
       quantity: ing.quantity,
     }));
-    const docRef = await addDoc(collection(db, 'recipes'), {
+
+    const body = {
       name: item.name,
-      description: item.description,
+      description: item.description.replaceAll(
+        '\n',
+        '<br />'
+      ),
       ingredients,
       tags: item.tags,
-    });
+    };
+
+    const docRef = await addDoc(
+      collection(db, 'recipes'),
+      body
+    );
 
     await revalidatePath('/admin');
 
