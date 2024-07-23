@@ -8,7 +8,8 @@ export default async function Home({
 }: {
   searchParams: { search: string };
 }) {
-  const items: RecipeParams[] = await getItems();
+  const { search } = searchParams;
+  const items: RecipeParams[] = await getItems(search);
 
   return (
     <>
