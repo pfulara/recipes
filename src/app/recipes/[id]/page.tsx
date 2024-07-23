@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { getItem } from '@/actions/itemsActions';
+import BackButton from '@/components/shared/BackButton';
 
 export default async function RecipeDetail({
   params,
@@ -15,6 +16,7 @@ export default async function RecipeDetail({
 
   return (
     <div className='p-4'>
+      <BackButton />
       <h2 className='font-black text-2xl uppercase'>
         {name}
       </h2>

@@ -4,8 +4,8 @@ declare type RecipeParams = {
   description: string;
   tags?: string[];
   ingredients: {
-    id: string;
-    name: string;
-    quantity: string;
+    id?: string;
+    name?: string;
+    quantity?: string;
   }[];
 };

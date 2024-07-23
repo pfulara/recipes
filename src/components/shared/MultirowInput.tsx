@@ -48,7 +48,7 @@ export default function MultirowInput({
         <div className='mt-4'>
           {value.map((item, index) => (
             <div
-              key={item.id}
+              key={item.id || index}
               className='grid grid-cols-11 gap-2 mb-2'
             >
               <Input
@@ -58,7 +58,7 @@ export default function MultirowInput({
                 onChange={(e) =>
                   fieldChangeHandler(
                     e.target.value,
-                    item.id,
+                    item.id || '',
                     'name'
                   )
                 }
@@ -70,7 +70,7 @@ export default function MultirowInput({
                 onChange={(e) =>
                   fieldChangeHandler(
                     e.target.value,
-                    item.id,
+                    item.id || '',
                     'quantity'
                   )
                 }
@@ -96,7 +96,7 @@ export default function MultirowInput({
                     size={28}
                     className='cursor-pointer hover:bg-accent rounded-full'
                     onClick={() =>
-                      removeItemHandle(item.id)
+                      removeItemHandle(item.id || '')
                     }
                   />
                 )}

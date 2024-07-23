@@ -1,45 +1,92 @@
 'use client';
-import { useEffect, useState } from 'react';
-
-import { Input } from '@/components/ui/input';
-import { debounce } from '@/lib/utils';
-import { debounceWait } from '@/const';
+import { useEffect } from 'react';
 import {
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CircleX } from 'lucide-react';
+
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from '@/components/ui/form';
+
+const formSchema = z.object({
+  search: z.string().optional(),
+});
 
 export default function SearchBar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [search, setSearch] = useState(
-    searchParams.get('search') || ''
-  );
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      search: searchParams.get('search') || '',
+    },
+  });
 
   useEffect(() => {
-    const timeoutId = debounce(async () => {
-      if (search) {
-        router.push(`${pathname}?search=${search}`);
-      } else {
-        router.push(`${pathname}`);
-      }
-    }, debounceWait);
-
-    return () => clearTimeout(timeoutId);
-  }, [search]);
-
-  useEffect(() => {
-    setSearch(searchParams.get('search') || '');
+    form.setValue(
+      'search',
+      searchParams.get('search') || ''
+    );
   }, [searchParams]);
+
+  const onSubmit = async ({
+    search,
+  }: z.infer<typeof formSchema>) => {
+    if (search) {
+      router.push(`${pathname}?search=${search}`);
+    } else {
+      router.push(`${pathname}`);
+    }
+  };
+
+  const clearSearchHandler = () => {
+    router.push(`${pathname}`);
+  };
+
   return (
-    <div className='mb-4'>
-      <Input
-        placeholder='Wyszukaj...'
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='mb-4 flex gap-2'
+      >
+        <FormField
+          name='search'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className='w-full relative'>
+              <FormControl>
+                <>
+                  <Input
+                    placeholder='Wyszukaj...'
+                    {...field}
+                  />
+                  {field.value && (
+                    <CircleX
+                      color='#b40000'
+                      className='absolute top-0 right-2 cursor-pointer'
+                      onClick={clearSearchHandler}
+                    />
+                  )}
+                </>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button>Wyszukaj</Button>
+      </form>
+    </Form>
   );
 }

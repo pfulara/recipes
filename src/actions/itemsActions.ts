@@ -10,6 +10,7 @@ import {
   getDocs,
   or,
   query,
+  updateDoc,
   where,
 } from '@firebase/firestore';
 import { revalidatePath } from 'next/cache';
@@ -39,6 +40,36 @@ export const addItem = async (item: RecipeParams) => {
     await revalidatePath('/admin');
 
     return JSON.parse(JSON.stringify(docRef));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const editItem = async (item: RecipeParams) => {
+  try {
+    if (item.id) {
+      const ingredients = item.ingredients.map((ing) => ({
+        name: ing.name,
+        quantity: ing.quantity,
+      }));
+
+      const body = {
+        name: item.name,
+        description: item.description.replaceAll(
+          '\n',
+          '<br />'
+        ),
+        ingredients,
+        tags: item.tags,
+      };
+
+      const docRef = doc(db, 'recipes', item.id);
+      await updateDoc(docRef, body);
+
+      await revalidatePath('/admin');
+
+      return true;
+    }
   } catch (error) {
     console.log(error);
   }
