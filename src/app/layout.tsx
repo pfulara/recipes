@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
@@ -22,15 +23,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider>
-      <body className={cn(font.className, 'bg-secondary')}>
-        <Header />
-        <main className='p-4 md:px-24'>
-          <div className='p-4 rounded-md shadow-md bg-white'>
-            {children}
-          </div>
-        </main>
-      </body>
-    </ThemeProvider>
+    <ClerkProvider>
+      <ThemeProvider>
+        <body
+          className={cn(font.className, 'bg-secondary')}
+        >
+          <Header />
+          <main className='p-4 md:px-24'>
+            <div className='p-4 rounded-md shadow-md bg-white'>
+              {children}
+            </div>
+          </main>
+        </body>
+      </ThemeProvider>
+    </ClerkProvider>
   );
 }
