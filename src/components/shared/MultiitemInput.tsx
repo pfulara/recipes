@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -34,9 +35,12 @@ export default ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <div className='flex gap-1 mt-2'>
+      <div className='flex gap-1 mt-2 flex-wrap'>
         {value.map((item) => (
-          <Badge key={item} className='flex gap-2 pr-1'>
+          <Badge
+            key={uuidv4()}
+            className='flex gap-2 pr-1 whitespace-nowrap'
+          >
             {item}
             <CircleX
               size={16}

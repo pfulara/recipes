@@ -70,7 +70,7 @@ const RecipeForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-2 gap-4'>
           <div>
             <FormField
               name='name'
@@ -128,7 +128,7 @@ const RecipeForm = ({
                   <FormLabel>Opis</FormLabel>
                   <FormControl>
                     <Textarea
-                      className='h-[calc(100%-35px)]'
+                      className='h-[calc(100%-35px)] min-h-[260px]'
                       placeholder='Opis'
                       {...field}
                     />

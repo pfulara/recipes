@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
+import { cn } from '@/lib/utils';
 
 import Header from '@/components/shared/Header';
-import { cn } from '@/lib/utils';
+import ThemeProvider from '@/providers/ThemeProvider';
 
 const font = Roboto({
   subsets: ['latin'],
@@ -21,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <ThemeProvider>
       <body className={cn(font.className, 'bg-secondary')}>
         <Header />
         <main className='p-4 md:px-24'>
@@ -30,6 +31,6 @@ export default function RootLayout({
           </div>
         </main>
       </body>
-    </html>
+    </ThemeProvider>
   );
 }

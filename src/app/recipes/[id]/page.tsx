@@ -17,7 +17,7 @@ export default async function RecipeDetail({
   return (
     <div className='p-4'>
       <BackButton />
-      <h2 className='font-black text-2xl uppercase'>
+      <h2 className='font-black text-header uppercase'>
         {name}
       </h2>
       <div className='grid md:grid-cols-2 mt-4 gap-4'>
@@ -25,7 +25,7 @@ export default async function RecipeDetail({
           {ingredients.map((ingr) => (
             <div
               key={uuidv4()}
-              className='grid grid-cols-2 border-b px-4 py-2 hover:bg-secondary/60'
+              className='grid grid-cols-2 border-b px-4 py-2 hover:bg-secondary/60 text-base'
             >
               <p>{ingr.name}</p>
               <p>{ingr.quantity}</p>
@@ -33,7 +33,7 @@ export default async function RecipeDetail({
           ))}
         </div>
         <div
-          className='mt-4 md:mt-0'
+          className='mt-4 md:mt-0 text-base'
           dangerouslySetInnerHTML={{ __html: description }}
         />
       </div>

@@ -14,7 +14,9 @@ export default function ItemCard({ item }: { item: any }) {
     <Card className='hover:shadow-md hover:bg-secondary/40 h-full'>
       <Link href={`/recipes/${item.id}`}>
         <CardHeader>
-          <CardTitle>{item.name}</CardTitle>
+          <CardTitle className='text-header'>
+            {item.name}
+          </CardTitle>
         </CardHeader>
       </Link>
 

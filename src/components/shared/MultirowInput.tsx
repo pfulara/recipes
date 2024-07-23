@@ -93,6 +93,7 @@ export default function MultirowInput({
                   />
                 ) : (
                   <CircleX
+                    color='#b40000'
                     size={28}
                     className='cursor-pointer hover:bg-accent rounded-full'
                     onClick={() =>

@@ -29,7 +29,7 @@ export default function AdminDeleteButton({
     <>
       <AlertDialog>
         <AlertDialogTrigger>
-          <Trash2 />
+          <Trash2 color='#b40000' />
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
