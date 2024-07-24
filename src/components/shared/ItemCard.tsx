@@ -21,7 +21,7 @@ export default function ItemCard({ item }: { item: any }) {
       </Link>
 
       <CardContent className='flex gap-2 flex-wrap'>
-        {item.tags.map((tag: string) => (
+        {item.tags.slice(0, 3).map((tag: string) => (
           <ItemBadge key={uuidv4()} tag={tag} />
         ))}
       </CardContent>
