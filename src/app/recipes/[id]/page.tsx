@@ -12,7 +12,7 @@ export default async function RecipeDetail({
 
   const { name, ingredients, description } = (await getItem(
     id
-  )) as RecipeParams;
+  )) as Recipe;
 
   return (
     <div className='p-4'>
