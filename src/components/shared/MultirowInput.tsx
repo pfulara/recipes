@@ -8,21 +8,23 @@ export default function MultirowInput({
   value,
   onChange,
 }: {
-  value: RecipeParams['ingredients'];
+  value: Recipe['ingredients'];
   onChange: ([
-    { id, name, quantity },
-  ]: RecipeParams['ingredients']) => any;
+    { $id, name, quantity },
+  ]: Recipe['ingredients']) => any;
 }) {
   const fieldChangeHandler = (
     fieldValue: string,
     id: string,
     field: string
   ) => {
-    const index = value.findIndex((item) => item.id === id);
-    const row = value.find((item) => item.id === id);
+    const index = value.findIndex(
+      (item) => item.$id === id
+    );
+    const row = value.find((item) => item.$id === id);
 
     const filteredItems = value.filter(
-      (item) => item.id !== id
+      (item) => item.$id !== id
     );
 
     if (row) {
@@ -36,7 +38,7 @@ export default function MultirowInput({
 
   const removeItemHandle = (id: string) => {
     const filteredItems = value.filter(
-      (item) => item.id !== id
+      (item) => item.$id !== id
     );
 
     onChange(filteredItems || []);
@@ -48,7 +50,7 @@ export default function MultirowInput({
         <div className='mt-4'>
           {value.map((item, index) => (
             <div
-              key={item.id || index}
+              key={item.$id || index}
               className='grid grid-cols-11 gap-2 mb-2'
             >
               <Input
@@ -58,7 +60,7 @@ export default function MultirowInput({
                 onChange={(e) =>
                   fieldChangeHandler(
                     e.target.value,
-                    item.id || '',
+                    item.$id || '',
                     'name'
                   )
                 }
@@ -70,7 +72,7 @@ export default function MultirowInput({
                 onChange={(e) =>
                   fieldChangeHandler(
                     e.target.value,
-                    item.id || '',
+                    item.$id || '',
                     'quantity'
                   )
                 }
@@ -84,7 +86,7 @@ export default function MultirowInput({
                       onChange([
                         ...value,
                         {
-                          id: uuidv4(),
+                          $id: uuidv4(),
                           name: '',
                           quantity: '',
                         },
@@ -97,7 +99,7 @@ export default function MultirowInput({
                     size={28}
                     className='cursor-pointer hover:bg-accent rounded-full'
                     onClick={() =>
-                      removeItemHandle(item.id || '')
+                      removeItemHandle(item.$id || '')
                     }
                   />
                 )}

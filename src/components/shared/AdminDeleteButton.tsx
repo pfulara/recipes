@@ -19,8 +19,8 @@ export default function AdminDeleteButton({
   id,
   name,
 }: {
-  id: RecipeParams['id'];
-  name: RecipeParams['name'];
+  id: Recipe['$id'];
+  name: Recipe['name'];
 }) {
   const deleteHandler = async () => {
     await deleteItem(id || '');

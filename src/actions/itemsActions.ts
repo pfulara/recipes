@@ -1,123 +1,133 @@
 'use server';
 
-import db from '@/lib/firestore';
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  or,
-  query,
-  updateDoc,
-  where,
-} from '@firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { database, ID, Query } from '@/appwrite';
 
-export const addItem = async (item: RecipeParams) => {
+export const addItem = async (
+  item: Recipe
+): Promise<Recipe> => {
+  const ingredients = item.ingredients.map((ing) => ({
+    name: ing.name,
+    quantity: ing.quantity,
+  }));
+  const tags = item.ingredients.map((ing) => ing.name);
+
+  const newRecipe = {
+    name: item.name,
+    description: item.description,
+    ingredients,
+    tags,
+  };
+
+  const res = await database.createDocument(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
+    'recipes',
+    ID.unique(),
+    newRecipe
+  );
+
+  const recipe = {
+    $id: res.$id,
+    name: res.name,
+    description: res.description,
+    tags: res.tags,
+    ingredients: res.ingredients,
+  };
+
+  await revalidatePath('/admin');
+
+  return recipe;
+};
+
+export const editItem = async (
+  item: Recipe
+): Promise<Recipe> => {
+  const ingredients = item.ingredients.map((ing) => ({
+    name: ing.name,
+    quantity: ing.quantity,
+  }));
+  const tags = item.ingredients.map((ing) => ing.name);
+
+  const recipe = {
+    name: item.name,
+    description: item.description.replaceAll(
+      '\n',
+      '<br />'
+    ),
+    ingredients,
+    tags,
+  };
+
+  const response = await database.updateDocument(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
+    'recipes',
+    item.$id || '',
+    recipe
+  );
+
+  await revalidatePath('/admin');
+
+  return {
+    $id: item.$id,
+    name: response.name,
+    description: response.description,
+    ingredients: response.ingredients,
+    tags: response.tags,
+  };
+};
+
+export const getItems = async (
+  name: string = '',
+  tags: string = ''
+): Promise<Recipe[]> => {
+  const response = await database.listDocuments(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
+    'recipes',
+    [
+      Query.and([
+        Query.contains('name', name),
+        Query.contains('tags', tags.split(' ')),
+      ]),
+    ]
+  );
+  const recipies = response.documents.map((doc) => ({
+    $id: doc.$id,
+    name: doc.name,
+    description: doc.description,
+    tags: doc.tags,
+    ingredients: doc.ingredients,
+  }));
+
+  return recipies;
+};
+
+export const getItem = async (
+  $id: string
+): Promise<Recipe> => {
+  const response = await database.listDocuments(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
+    'recipes',
+    [Query.equal('$id', $id)]
+  );
+
+  const recipe = {
+    $id: response.documents[0].$id,
+    name: response.documents[0].name,
+    description: response.documents[0].description,
+    tags: response.documents[0].tags,
+    ingredients: response.documents[0].ingredients,
+  };
+
+  return recipe;
+};
+
+export const deleteItem = async ($id: string) => {
   try {
-    const ingredients = item.ingredients.map((ing) => ({
-      name: ing.name,
-      quantity: ing.quantity,
-    }));
-
-    const body = {
-      name: item.name,
-      description: item.description.replaceAll(
-        '\n',
-        '<br />'
-      ),
-      ingredients,
-      tags: item.tags,
-    };
-
-    const docRef = await addDoc(
-      collection(db, 'recipes'),
-      body
+    await database.deleteDocument(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
+      'recipes',
+      $id
     );
-
-    await revalidatePath('/admin');
-
-    return JSON.parse(JSON.stringify(docRef));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const editItem = async (item: RecipeParams) => {
-  try {
-    if (item.id) {
-      const ingredients = item.ingredients.map((ing) => ({
-        name: ing.name,
-        quantity: ing.quantity,
-      }));
-
-      const body = {
-        name: item.name,
-        description: item.description.replaceAll(
-          '\n',
-          '<br />'
-        ),
-        ingredients,
-        tags: item.tags,
-      };
-
-      const docRef = doc(db, 'recipes', item.id);
-      await updateDoc(docRef, body);
-
-      await revalidatePath('/admin');
-
-      return true;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getItems = async (search: string = '') => {
-  try {
-    const queryRef = collection(db, 'recipes');
-
-    const querySnapshot = search
-      ? await getDocs(
-          query(
-            queryRef,
-            or(
-              where('tags', 'array-contains-any', [search]),
-              where('name', '==', search)
-            )
-          )
-        )
-      : await getDocs(queryRef);
-
-    const items = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-
-    return JSON.parse(JSON.stringify(items));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getItem = async (id: string) => {
-  try {
-    const docRef = await doc(db, 'recipes', id);
-    const item = await getDoc(docRef);
-
-    return JSON.parse(JSON.stringify(item.data()));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteItem = async (id: string) => {
-  try {
-    const itemRef = doc(db, 'recipes', id);
-    await deleteDoc(itemRef);
-
     revalidatePath('/admin');
   } catch (error) {
     console.error('Error deleting document: ', error);

@@ -15,24 +15,22 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import MultiitemInput from '@/components/shared/MultiitemInput';
 import { Textarea } from '@/components/ui/textarea';
 import MultirowInput from '@/components/shared/MultirowInput';
 import { addItem, editItem } from '@/actions/itemsActions';
 
 const formSchema = z.object({
-  id: z.string().optional(),
+  $id: z.string().optional(),
   name: z.string().min(2, {
     message: 'Wymagana nazwa',
   }),
   ingredients: z
     .object({
-      id: z.string().optional(),
+      $id: z.string().optional(),
       name: z.string().optional(),
       quantity: z.string().optional(),
     })
     .array(),
-  tags: z.string().array().optional(),
   description: z
     .string()
     .min(2, { message: 'Wymagany opis' }),
@@ -52,9 +50,8 @@ const RecipeForm = ({
   const onSubmit = async (
     values: z.infer<typeof formSchema>
   ) => {
-    if (values.id) {
+    if (values.$id) {
       const newRecipe = await editItem(values);
-
       if (newRecipe) {
         router.push('/admin');
       }
@@ -80,23 +77,6 @@ const RecipeForm = ({
                   <FormLabel>Nazwa</FormLabel>
                   <FormControl>
                     <Input placeholder='Nazwa' {...field} />
-                  </FormControl>
-                  <FormMessage className='absolute top-7 right-0' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name='tags'
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className='pt-8 relative'>
-                  <FormLabel>Tagi</FormLabel>
-                  <FormControl>
-                    <MultiitemInput
-                      placeholder='Tagi'
-                      value={field.value || []}
-                      onChange={field.onChange}
-                    />
                   </FormControl>
                   <FormMessage className='absolute top-7 right-0' />
                 </FormItem>

@@ -12,7 +12,7 @@ import ItemBadge from './ItemBadge';
 export default function ItemCard({ item }: { item: any }) {
   return (
     <Card className='hover:shadow-md hover:bg-secondary/40 h-full'>
-      <Link href={`/recipes/${item.id}`}>
+      <Link href={`/recipes/${item.$id}`}>
         <CardHeader>
           <CardTitle className='text-header'>
             {item.name}

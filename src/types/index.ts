@@ -1,11 +1,11 @@
-declare type RecipeParams = {
-  id?: string;
+interface Recipe {
+  $id?: string;
   name: string;
   description: string;
   tags?: string[];
   ingredients: {
-    id?: string;
+    $id?: string;
     name?: string;
     quantity?: string;
   }[];
-};
+}

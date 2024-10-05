@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/form';
 
 const formSchema = z.object({
-  search: z.string().optional(),
+  name: z.string().optional(),
+  ingredients: z.string().optional(),
 });
 
 export default function SearchBar() {
@@ -31,22 +32,30 @@ export default function SearchBar() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      search: searchParams.get('search') || '',
+      name: searchParams.get('name') || '',
+      ingredients: searchParams.get('ingredients') || '',
     },
   });
 
   useEffect(() => {
+    form.setValue('name', searchParams.get('name') || '');
     form.setValue(
-      'search',
-      searchParams.get('search') || ''
+      'ingredients',
+      searchParams.get('ingredients') || ''
     );
   }, [searchParams]);
 
   const onSubmit = async ({
-    search,
+    name,
+    ingredients,
   }: z.infer<typeof formSchema>) => {
-    if (search) {
-      router.push(`${pathname}?search=${search}`);
+    if (name || ingredients) {
+      let url = `${pathname}?`;
+      if (name) url += `name=${name}`;
+      if (name && ingredients) url += '&';
+      if (ingredients) url += `ingredients=${ingredients}`;
+
+      router.push(url);
     } else {
       router.push(`${pathname}`);
     }
@@ -60,32 +69,53 @@ export default function SearchBar() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='mb-4 flex gap-2'
+        className='mb-4 flex gap-2 max-md:flex-col'
       >
         <FormField
-          name='search'
+          name='name'
           control={form.control}
           render={({ field }) => (
             <FormItem className='w-full relative'>
               <FormControl>
                 <>
                   <Input
-                    placeholder='Wyszukaj...'
+                    placeholder='Nazwa...'
                     {...field}
                   />
-                  {field.value && (
-                    <CircleX
-                      color='#b40000'
-                      className='absolute top-0 right-2 cursor-pointer'
-                      onClick={clearSearchHandler}
-                    />
-                  )}
                 </>
               </FormControl>
             </FormItem>
           )}
         />
-        <Button>Wyszukaj</Button>
+        <FormField
+          name='ingredients'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className='w-full relative'>
+              <FormControl>
+                <>
+                  <Input
+                    placeholder='Składniki...'
+                    {...field}
+                  />
+                </>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <div className='flex md:w-52 gap-2 items-center max-md:flex-row-reverse max-md:justify-end'>
+          {(searchParams.get('ingredients') ||
+            searchParams.get('name')) && (
+            <CircleX
+              color='#b40000'
+              className='cursor-pointer'
+              onClick={clearSearchHandler}
+              size={24}
+            />
+          )}
+
+          <Button>Wyszukaj</Button>
+        </div>
       </form>
     </Form>
   );

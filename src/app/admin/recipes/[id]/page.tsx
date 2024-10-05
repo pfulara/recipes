@@ -9,10 +9,10 @@ export default async function AdminRecipeEdit({
   const { id } = params;
 
   const { name, ingredients, description, tags } =
-    (await getItem(id)) as RecipeParams;
+    (await getItem(id)) as Recipe;
 
   const defaultValues = {
-    id,
+    $id: id,
     name,
     ingredients,
     tags,

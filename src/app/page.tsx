@@ -6,7 +6,7 @@ import SearchBar from '@/components/shared/SearchBar';
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { search: string };
+  searchParams: { name: string; ingredients: string };
 }) {
   return (
     <>

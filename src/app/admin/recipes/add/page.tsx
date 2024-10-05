@@ -4,9 +4,11 @@ import RecipeForm from '@/components/shared/RecipeForm';
 
 const AddRecipe = () => {
   const defaultValues = {
-    id: '',
+    $id: '',
     name: '',
-    ingredients: [{ id: uuidv4(), name: '', quantity: '' }],
+    ingredients: [
+      { $id: uuidv4(), name: '', quantity: '' },
+    ],
     tags: [],
     description: '',
   };
