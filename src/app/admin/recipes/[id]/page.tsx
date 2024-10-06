@@ -8,15 +8,16 @@ export default async function AdminRecipeEdit({
 }) {
   const { id } = params;
 
-  const { name, ingredients, description, tags } =
-    (await getItem(id)) as Recipe;
+  const { $id, name, slug, tags, fases } = (await getItem(
+    id
+  )) as Recipe;
 
   const defaultValues = {
-    $id: id,
+    $id,
+    slug,
     name,
-    ingredients,
+    fases,
     tags,
-    description: description.replaceAll('<br />', '\n'),
   };
 
   return (

@@ -13,3 +13,20 @@ export const debounce = (
 ) => {
   return setTimeout(callback, delay);
 };
+
+// Generating slug from name
+export const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replaceAll(' ', '-')
+    .replaceAll('ą', 'a')
+    .replaceAll('ć', 'c')
+    .replaceAll('ę', 'e')
+    .replaceAll('ł', 'l')
+    .replaceAll('ń', 'n')
+    .replaceAll('ó', 'o')
+    .replaceAll('ś', 's')
+    .replaceAll('ż', 'z')
+    .replaceAll('ź', 'z')
+    .replace(/[^a-zA-Z-]/g, '');
+};

@@ -8,10 +8,10 @@ export default function MultirowInput({
   value,
   onChange,
 }: {
-  value: Recipe['ingredients'];
+  value: Ingredients[];
   onChange: ([
     { $id, name, quantity },
-  ]: Recipe['ingredients']) => any;
+  ]: Ingredients[]) => any;
 }) {
   const fieldChangeHandler = (
     fieldValue: string,
