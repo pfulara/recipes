@@ -9,7 +9,7 @@ export default function BackButton() {
   return (
     <Button
       onClick={router.back}
-      className='gap-2 text-lg font-bold mb-4'
+      className='gap-2 text-lg font-bold'
       variant='outline'
     >
       <CircleArrowLeft />

@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import ShopList from '@/components/shared/ShopList';
 
 export default async function RecipeDetail({
   params,
@@ -21,7 +22,11 @@ export default async function RecipeDetail({
 
   return (
     <div className='p-4'>
-      <BackButton />
+      <div className='flex justify-between items-center mb-4'>
+        <BackButton />
+        <ShopList fases={fases} />
+      </div>
+
       <h2 className='font-black text-header uppercase'>
         {name}
       </h2>
