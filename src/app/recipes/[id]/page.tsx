@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Metadata } from 'next';
 
 import { getItem } from '@/actions/itemsActions';
 import BackButton from '@/components/shared/BackButton';
@@ -11,11 +12,25 @@ import {
 } from '@/components/ui/accordion';
 import ShopList from '@/components/shared/ShopList';
 
+interface RecipeProps {
+  params: {
+    id: string;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: RecipeProps): Promise<Metadata> {
+  const { id } = params;
+  const { name } = (await getItem(id)) as Recipe;
+  return {
+    title: name,
+  };
+}
+
 export default async function RecipeDetail({
   params,
-}: {
-  params: { id: string };
-}) {
+}: RecipeProps) {
   const { id } = params;
 
   const { name, fases } = (await getItem(id)) as Recipe;

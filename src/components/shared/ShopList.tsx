@@ -23,7 +23,7 @@ const ShopList = ({ fases }: { fases: Fase[] }) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button className='font-bold text-lg'>
           Lista zakupów
         </Button>
@@ -33,16 +33,21 @@ const ShopList = ({ fases }: { fases: Fase[] }) => {
           <DialogTitle className='mb-4'>
             Lista zakupów
           </DialogTitle>
-          <DialogDescription>
-            {list
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map(({ name, quantity }) => (
-                <div className='grid grid-cols-2 gap-2 mt-2 border-b py-2'>
-                  <div>{name}</div>
-                  <div>{quantity}</div>
-                </div>
-              ))}
-          </DialogDescription>
+          {list
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(({ name, quantity }) => (
+              <div
+                key={name}
+                className='grid grid-cols-2 gap-2 mt-2 border-b py-2'
+              >
+                <DialogDescription>
+                  {name}
+                </DialogDescription>
+                <DialogDescription>
+                  {quantity}
+                </DialogDescription>
+              </div>
+            ))}
         </DialogHeader>
       </DialogContent>
     </Dialog>

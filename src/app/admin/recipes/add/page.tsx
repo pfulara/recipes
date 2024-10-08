@@ -1,6 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import RecipeForm from '@/components/shared/RecipeForm';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dodaj przepis',
+};
 
 const AddRecipe = () => {
   const defaultValues = {

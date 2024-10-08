@@ -1,11 +1,26 @@
 import { getItem } from '@/actions/itemsActions';
 import RecipeForm from '@/components/shared/RecipeForm';
+import { Metadata } from 'next';
+
+interface RecipeProps {
+  params: {
+    id: string;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: RecipeProps): Promise<Metadata> {
+  const { id } = params;
+  const { name } = (await getItem(id)) as Recipe;
+  return {
+    title: name,
+  };
+}
 
 export default async function AdminRecipeEdit({
   params,
-}: {
-  params: { id: string };
-}) {
+}: RecipeProps) {
   const { id } = params;
 
   const { $id, name, slug, tags, fases } = (await getItem(

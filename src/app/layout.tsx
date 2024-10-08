@@ -13,7 +13,10 @@ const font = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'Przepisy',
+  title: {
+    template: '%s | Przepisy',
+    default: 'Przepisy',
+  },
   description: 'Książka kucharska',
 };
 
